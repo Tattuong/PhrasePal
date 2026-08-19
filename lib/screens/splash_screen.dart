@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../core/constants/app_colors.dart';
+import '../core/constants/app_fonts.dart';
 import '../core/constants/app_strings.dart';
 import '../core/services/sound_service.dart';
 import '../core/services/tts_service.dart';
 import '../providers/phrase_provider.dart';
-import '../providers/shop_provider.dart';
 import 'home/main_shell.dart';
 import 'onboarding/onboarding_screen.dart';
 
@@ -45,8 +44,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       await Future.wait([
         context.read<PhraseProvider>().init(),
         TtsService.instance.init(),
-        context.read<ShopProvider>().claimDailyReward(),
-        Future<void>.delayed(const Duration(milliseconds: 1100)),
+        Future<void>.delayed(const Duration(milliseconds: 450)),
       ]).timeout(const Duration(seconds: 8));
     } catch (e) {
       debugPrint('Splash boot timeout/error: $e');
@@ -80,23 +78,30 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       scale: _scale,
                       child: Column(
                         children: [
-                          Image.asset('assets/logo.png', width: 112, height: 112, filterQuality: FilterQuality.medium),
+                          Image.asset(
+                            'assets/logo.png',
+                            width: 112,
+                            height: 112,
+                            cacheWidth: 224,
+                            cacheHeight: 224,
+                            filterQuality: FilterQuality.medium,
+                          ),
                           const SizedBox(height: 22),
                           Text(
                             AppStrings.t(context, 'appName'),
-                            style: GoogleFonts.nunito(fontSize: 36, fontWeight: FontWeight.w800, color: Colors.white),
+                            style: PpText.nunito(fontSize: 36, fontWeight: FontWeight.w800, color: Colors.white),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             AppStrings.t(context, 'appTagline'),
-                            style: GoogleFonts.nunito(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white70),
+                            style: PpText.nunito(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white70),
                           ),
                         ],
                       ),
                     ),
                   ),
                   const Spacer(flex: 4),
-                  Text(AppStrings.t(context, 'loading'), style: GoogleFonts.nunito(color: Colors.white70, fontWeight: FontWeight.w600)),
+                  Text(AppStrings.t(context, 'loading'), style: PpText.nunito(color: Colors.white70, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 36),
                 ],
               ),

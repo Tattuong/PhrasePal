@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'core/navigation/app_navigator.dart';
 import 'core/services/storage_service.dart';
+import 'models/app_theme_preset.dart';
 import 'providers/phrase_provider.dart';
 import 'providers/shop_provider.dart';
 import 'providers/theme_provider.dart';
@@ -36,41 +36,48 @@ class PhrasePalApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: appThemeProvider),
-        ChangeNotifierProvider(create: (_) => ShopProvider()..init()),
+        ChangeNotifierProvider(create: (_) {
+          final shop = ShopProvider();
+          appPhraseProvider.bindShop(shop);
+          shop.init();
+          return shop;
+        }),
         ChangeNotifierProvider.value(value: appPhraseProvider),
       ],
-      child: Consumer2<ThemeProvider, ShopProvider>(
-        builder: (context, theme, shop, _) {
-          appPhraseProvider.bindShop(shop);
-          final preset = shop.activeTheme;
-          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: theme.isDarkMode ? Brightness.light : Brightness.dark,
-          ));
+      child: const _MaterialRoot(),
+    );
+  }
+}
 
-          return MaterialApp(
-            navigatorKey: rootNavigatorKey,
-            title: 'PhrasePal',
-            debugShowCheckedModeBanner: false,
-            theme: preset.lightTheme(),
-            darkTheme: preset.darkTheme(),
-            themeMode: theme.themeMode,
-            locale: const Locale('en'),
-            builder: (context, child) => CoinRewardListener(child: child ?? const SizedBox.shrink()),
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [Locale('en')],
-            home: const SplashScreen(),
-            routes: {
-              '/shop': (_) => const ShopScreen(),
-              '/privacy': (_) => const PrivacyPolicyScreen(),
-            },
-          );
-        },
-      ),
+class _MaterialRoot extends StatelessWidget {
+  const _MaterialRoot();
+
+  @override
+  Widget build(BuildContext context) {
+    final themeMode = context.select<ThemeProvider, ThemeMode>((t) => t.themeMode);
+    final themeId = context.select<ShopProvider, String>((s) => s.activeThemeId);
+    final preset = AppThemePresets.get(themeId);
+
+    return MaterialApp(
+      navigatorKey: rootNavigatorKey,
+      title: 'PhrasePal',
+      debugShowCheckedModeBanner: false,
+      theme: AppThemeCache.light(preset),
+      darkTheme: AppThemeCache.dark(preset),
+      themeMode: themeMode,
+      locale: const Locale('en'),
+      builder: (context, child) => CoinRewardListener(child: child ?? const SizedBox.shrink()),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en')],
+      home: const SplashScreen(),
+      routes: {
+        '/shop': (_) => const ShopScreen(),
+        '/privacy': (_) => const PrivacyPolicyScreen(),
+      },
     );
   }
 }

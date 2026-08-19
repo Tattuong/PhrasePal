@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constants/app_colors.dart';
@@ -13,6 +12,7 @@ import '../../providers/theme_provider.dart';
 import '../../widgets/app_scaffold.dart';
 import '../../widgets/app_toast.dart';
 import '../privacy_policy_screen.dart';
+import '../../core/constants/app_fonts.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -43,7 +43,7 @@ class SettingsScreen extends StatelessWidget {
                   Expanded(
                     child: Text(
                       AppStrings.t(context, 'settings'),
-                      style: GoogleFonts.nunito(fontSize: 28, fontWeight: FontWeight.w800, color: accent, height: 1.05),
+                      style: PpText.nunito(fontSize: 28, fontWeight: FontWeight.w800, color: accent, height: 1.05),
                     ),
                   ),
                 ],
@@ -173,7 +173,7 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(4, 18, 4, 8),
-      child: Text(text, style: GoogleFonts.nunito(fontWeight: FontWeight.w800, color: AppColors.muted(context))),
+      child: Text(text, style: PpText.nunito(fontWeight: FontWeight.w800, color: AppColors.muted(context))),
     );
   }
 }
@@ -205,8 +205,8 @@ class _Row extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       leading: Icon(icon, color: context.lumenAccent),
-      title: Text(title, style: GoogleFonts.nunito(fontWeight: FontWeight.w700)),
-      subtitle: subtitle == null ? null : Text(subtitle!, style: GoogleFonts.nunito(fontSize: 12, color: AppColors.muted(context))),
+      title: Text(title, style: PpText.nunito(fontWeight: FontWeight.w700)),
+      subtitle: subtitle == null ? null : Text(subtitle!, style: PpText.nunito(fontSize: 12, color: AppColors.muted(context))),
       trailing: trailing,
     );
   }

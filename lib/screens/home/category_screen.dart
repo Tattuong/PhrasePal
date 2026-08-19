@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_fonts.dart';
 import '../../core/constants/app_strings.dart';
 import '../../data/phrase_catalog.dart';
 import '../../models/app_theme_preset.dart';
@@ -20,10 +20,9 @@ class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final phrases = context.watch<PhraseProvider>();
-    final shop = context.watch<ShopProvider>();
+    final large = context.select<ShopProvider, bool>((s) => s.hasLargeType);
+    final skin = CardStyle.get(context.select<ShopProvider, String>((s) => s.activeSkinId));
     final list = phrases.phrasesIn(category.id);
-    final skin = shop.activeCardStyle;
-    final large = shop.hasLargeType;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -39,7 +38,7 @@ class CategoryScreen extends StatelessWidget {
                     Expanded(
                       child: Text(
                         AppStrings.t(context, category.nameKey),
-                        style: GoogleFonts.nunito(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.ink(context)),
+                        style: PpText.nunito(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.ink(context)),
                       ),
                     ),
                   ],
@@ -63,8 +62,8 @@ class CategoryScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(AppStrings.t(context, 'playAll'), style: GoogleFonts.nunito(fontWeight: FontWeight.w800)),
-                                Text(AppStrings.t(context, 'playAllDesc'), style: GoogleFonts.nunito(fontSize: 12, color: AppColors.muted(context))),
+                                Text(AppStrings.t(context, 'playAll'), style: PpText.nunito(fontWeight: FontWeight.w800)),
+                                Text(AppStrings.t(context, 'playAllDesc'), style: PpText.nunito(fontSize: 12, color: AppColors.muted(context))),
                               ],
                             ),
                           ),
@@ -115,18 +114,18 @@ class _PhraseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final phrases = context.watch<PhraseProvider>();
-    final fav = phrases.isFavorite(phrase.id);
-    final playing = phrases.isPlaying(phrase.id);
+    final fav = context.select<PhraseProvider, bool>((p) => p.isFavorite(phrase.id));
+    final playing = context.select<PhraseProvider, bool>((p) => p.isPlaying(phrase.id));
     final look = context.ftrTheme;
-    return DecoratedBox(
+    return RepaintBoundary(
+      child: DecoratedBox(
       decoration: look.surfaceCard(radius: skin.paperRadius(16)),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 8, 12),
         child: Row(
           children: [
             IconButton(
-              onPressed: () => phrases.toggleFavorite(phrase),
+              onPressed: () => context.read<PhraseProvider>().toggleFavorite(phrase),
               icon: Icon(
                 fav ? Icons.star_rounded : Icons.star_rounded,
                 color: fav ? AppColors.coin : const Color(0xFFD8D2C8),
@@ -137,10 +136,10 @@ class _PhraseCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(phrase.native, style: GoogleFonts.nunito(fontSize: large ? 20 : 16, fontWeight: FontWeight.w800, color: AppColors.ink(context))),
+                  Text(phrase.native, style: PpText.nunito(fontSize: large ? 20 : 16, fontWeight: FontWeight.w800, color: AppColors.ink(context))),
                   const SizedBox(height: 2),
-                  Text(phrase.romanization, style: GoogleFonts.nunito(fontSize: 13, color: AppColors.muted(context))),
-                  Text(phrase.english, style: GoogleFonts.nunito(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.ink(context).withValues(alpha: 0.75))),
+                  Text(phrase.romanization, style: PpText.nunito(fontSize: 13, color: AppColors.muted(context))),
+                  Text(phrase.english, style: PpText.nunito(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.ink(context).withValues(alpha: 0.75))),
                 ],
               ),
             ),
@@ -153,7 +152,7 @@ class _PhraseCard extends StatelessWidget {
                 customBorder: const CircleBorder(),
                 onTap: () {
                   HapticFeedback.selectionClick();
-                  _speak(context, phrases, phrase);
+                  _speak(context, context.read<PhraseProvider>(), phrase);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(12),
@@ -163,6 +162,7 @@ class _PhraseCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

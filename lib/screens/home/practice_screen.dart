@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constants/app_colors.dart';
@@ -11,6 +10,7 @@ import '../../providers/phrase_provider.dart';
 import '../../providers/shop_provider.dart';
 import '../../widgets/app_scaffold.dart';
 import '../../widgets/app_toast.dart';
+import '../../core/constants/app_fonts.dart';
 
 class PracticeScreen extends StatefulWidget {
   const PracticeScreen({super.key});
@@ -67,11 +67,11 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(AppStrings.t(context, 'practiceDone'), style: GoogleFonts.nunito(fontSize: 26, fontWeight: FontWeight.w800, color: ink)),
+                      Text(AppStrings.t(context, 'practiceDone'), style: PpText.nunito(fontSize: 26, fontWeight: FontWeight.w800, color: ink)),
                       const SizedBox(height: 8),
                       Text(
                         AppStrings.t(context, 'practiceScore', {'ok': '$_ok', 'total': '${_queue.length}'}),
-                        style: GoogleFonts.nunito(color: AppColors.muted(context)),
+                        style: PpText.nunito(color: AppColors.muted(context)),
                       ),
                       const SizedBox(height: 24),
                       FilledButton(onPressed: () => Navigator.pop(context), child: Text(AppStrings.t(context, 'continue'))),
@@ -84,17 +84,17 @@ class _PracticeScreenState extends State<PracticeScreen> {
                         children: [
                           IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_rounded)),
                           Expanded(
-                            child: Text(AppStrings.t(context, 'practiceTitle'), style: GoogleFonts.nunito(fontWeight: FontWeight.w800, fontSize: 18)),
+                            child: Text(AppStrings.t(context, 'practiceTitle'), style: PpText.nunito(fontWeight: FontWeight.w800, fontSize: 18)),
                           ),
                           Text('${_index + 1}/${_queue.length}'),
                         ],
                       ),
                       const SizedBox(height: 24),
-                      Text(_current.english, textAlign: TextAlign.center, style: GoogleFonts.nunito(fontSize: 22, fontWeight: FontWeight.w800, color: ink)),
+                      Text(_current.english, textAlign: TextAlign.center, style: PpText.nunito(fontSize: 22, fontWeight: FontWeight.w800, color: ink)),
                       const SizedBox(height: 20),
                       if (_revealed) ...[
-                        Text(_current.native, textAlign: TextAlign.center, style: GoogleFonts.nunito(fontSize: 20, fontWeight: FontWeight.w800)),
-                        Text(_current.romanization, textAlign: TextAlign.center, style: GoogleFonts.nunito(color: AppColors.muted(context))),
+                        Text(_current.native, textAlign: TextAlign.center, style: PpText.nunito(fontSize: 20, fontWeight: FontWeight.w800)),
+                        Text(_current.romanization, textAlign: TextAlign.center, style: PpText.nunito(color: AppColors.muted(context))),
                       ],
                       const Spacer(),
                       OutlinedButton.icon(

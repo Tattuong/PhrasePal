@@ -17,14 +17,11 @@ dependencies:
   cupertino_icons: ^1.0.6
   provider: ^6.1.5
   shared_preferences: ^2.5.3
-  google_fonts: ^6.3.3
   in_app_purchase: ^3.2.1
   http: ^1.2.2
   intl: ^0.20.2
   share_plus: ^10.1.4
-  flutter_tts: ^4.2.2
   audioplayers: ^6.8.1
-  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:
@@ -46,3 +43,7 @@ flutter:
   assets:
     - assets/logo.png
     - assets/audio/
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-Variable.ttf

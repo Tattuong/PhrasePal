@@ -16,14 +16,16 @@ class FtrBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     final bg = context.select<ShopProvider, AppBackground>((s) => s.activeBackground);
     final ftr = context.ftrTheme;
+    final customBg = bg.id != ShopCatalog.defaultBackgroundId;
+    if (!customBg && !ftr.isPremium) return child;
+
     return Stack(
       fit: StackFit.expand,
       children: [
-        if (bg.id != ShopCatalog.defaultBackgroundId)
-          DecoratedBox(decoration: BoxDecoration(gradient: bg.gradient)),
+        if (customBg) DecoratedBox(decoration: BoxDecoration(gradient: bg.gradient)),
         if (ftr.isPremium)
           const _PremiumAura()
-        else if (bg.id != ShopCatalog.defaultBackgroundId)
+        else
           const _PremiumAura(soft: true),
         child,
       ],
@@ -62,14 +64,14 @@ class _PremiumAura extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: -120,
-              right: -90,
-              child: GlowOrb(color: ftr.glowColor.withValues(alpha: 0.48 * boost), size: 320),
+              top: -80,
+              right: -60,
+              child: GlowOrb(color: ftr.glowColor.withValues(alpha: 0.48 * boost), size: 180),
             ),
             Positioned(
               bottom: 40,
-              left: -110,
-              child: GlowOrb(color: ftr.primary.withValues(alpha: 0.3 * boost), size: 250),
+              left: -70,
+              child: GlowOrb(color: ftr.primary.withValues(alpha: 0.3 * boost), size: 140),
             ),
             Positioned.fill(
               child: DecoratedBox(

@@ -225,6 +225,7 @@ class AppThemePreset {
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
+      fontFamily: 'Nunito',
       scaffoldBackgroundColor: scaffold,
       colorScheme: isDark
           ? ColorScheme.dark(
@@ -387,6 +388,14 @@ class AppThemePresets {
   };
 
   static AppThemePreset get(String? id) => byId[id] ?? defaultPreset;
+}
+
+class AppThemeCache {
+  static final _light = <String, ThemeData>{};
+  static final _dark = <String, ThemeData>{};
+
+  static ThemeData light(AppThemePreset preset) => _light[preset.id] ??= preset.lightTheme();
+  static ThemeData dark(AppThemePreset preset) => _dark[preset.id] ??= preset.darkTheme();
 }
 
 class AppBackground {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_fonts.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/navigation/app_navigator.dart';
 import '../../models/app_theme_preset.dart';
@@ -110,7 +110,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     Expanded(
                       child: Text(
                         AppStrings.t(context, 'shop'),
-                        style: GoogleFonts.nunito(fontSize: 28, fontWeight: FontWeight.w800, color: context.lumenAccent),
+                        style: PpText.nunito(fontSize: 28, fontWeight: FontWeight.w800, color: context.lumenAccent),
                       ),
                     ),
                     CoinBalanceChip(onTap: () => CoinPurchaseSheet.show(context)),
@@ -167,13 +167,13 @@ class _ShopScreenState extends State<ShopScreen> {
                     Expanded(
                       child: Text(
                         _tabTitle,
-                        style: GoogleFonts.nunito(fontSize: 13, fontWeight: FontWeight.w800, color: context.lumenAccent, letterSpacing: 0.4),
+                        style: PpText.nunito(fontSize: 13, fontWeight: FontWeight.w800, color: context.lumenAccent, letterSpacing: 0.4),
                       ),
                     ),
                     if (_canResetTab(shop))
                       TextButton(
                         onPressed: () => _resetTab(context, shop),
-                        child: Text(AppStrings.t(context, 'useDefault'), style: GoogleFonts.nunito(fontWeight: FontWeight.w800)),
+                        child: Text(AppStrings.t(context, 'useDefault'), style: PpText.nunito(fontWeight: FontWeight.w800)),
                       ),
                   ],
                 ),
@@ -205,7 +205,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   child: TextButton(
                     onPressed: shop.restorePurchases,
                     style: TextButton.styleFrom(foregroundColor: AppColors.textMuted),
-                    child: Text(AppStrings.t(context, 'restorePurchases'), style: GoogleFonts.nunito(fontWeight: FontWeight.w700)),
+                    child: Text(AppStrings.t(context, 'restorePurchases'), style: PpText.nunito(fontWeight: FontWeight.w700)),
                   ),
                 ),
               ),
@@ -237,7 +237,7 @@ class _ShopTab extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.nunito(
+          style: PpText.nunito(
             fontWeight: FontWeight.w800,
             color: selected ? context.lumenOnAccent : AppColors.ink(context),
           ),
@@ -283,7 +283,7 @@ class _TodayPaperState extends State<_TodayPaper> {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(AppStrings.t(context, 'shopToday'), style: GoogleFonts.nunito(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.ink(context))),
+            Text(AppStrings.t(context, 'shopToday'), style: PpText.nunito(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.ink(context))),
             const SizedBox(height: 10),
             Wrap(
               spacing: 8,
@@ -339,7 +339,7 @@ class _Pill extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(color: AppColors.card(context), borderRadius: BorderRadius.circular(20)),
-          child: Text(label, style: GoogleFonts.nunito(fontWeight: FontWeight.w800, color: AppColors.ink(context), fontSize: 12)),
+          child: Text(label, style: PpText.nunito(fontWeight: FontWeight.w800, color: AppColors.ink(context), fontSize: 12)),
         ),
       ),
     );
@@ -395,7 +395,7 @@ class _DeskPaper extends StatelessWidget {
               AppStrings.t(context, item.nameKey),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.nunito(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor, height: 1.2),
+              style: PpText.nunito(fontSize: 16, fontWeight: FontWeight.w800, color: titleColor, height: 1.2),
             ),
             const SizedBox(height: 6),
             Expanded(
@@ -403,7 +403,7 @@ class _DeskPaper extends StatelessWidget {
                 AppStrings.t(context, item.descKey),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.nunito(fontSize: 13, height: 1.35, fontWeight: FontWeight.w500, color: subColor),
+                style: PpText.nunito(fontSize: 13, height: 1.35, fontWeight: FontWeight.w500, color: subColor),
               ),
             ),
             _Seal(item: item, shop: shop, owned: owned, active: active, onDark: onDark),
@@ -458,7 +458,7 @@ class _Seal extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.nunito(
+          style: PpText.nunito(
             fontWeight: FontWeight.w800,
             color: onDark ? Colors.white : const Color(0xFF1A2E5A),
             fontSize: 12,

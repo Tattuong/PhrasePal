@@ -17,7 +17,10 @@ class CoinNotification {
       if (ctx == null || !ctx.mounted) return;
 
       final amount = event.amount.toString();
-      final title = AppStrings.t(ctx, 'coinEarned', {'amount': amount});
+      final reason = AppStrings.t(ctx, event.messageKey);
+      final title = reason == event.messageKey
+          ? AppStrings.t(ctx, 'coinEarned', {'amount': amount})
+          : reason;
       final message = AppStrings.t(ctx, 'coinRewardSub', {'balance': balance.toString()});
 
       AppToast.show(
@@ -26,6 +29,7 @@ class CoinNotification {
         message: message,
         icon: Icons.stars_rounded,
         color: AppColors.coin,
+        amountLabel: '+$amount',
       );
     });
   }

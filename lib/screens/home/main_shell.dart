@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_fonts.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/navigation/app_navigator.dart';
 import '../../core/services/sound_service.dart';
@@ -25,6 +25,9 @@ class _MainShellState extends State<MainShell> {
   void initState() {
     super.initState();
     AppTabs.index.addListener(_onTab);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.read<ShopProvider>().claimDailyReward();
+    });
   }
 
   void _onTab() {
@@ -107,7 +110,7 @@ class _NavItem extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.nunito(fontSize: 10, fontWeight: selected ? FontWeight.w800 : FontWeight.w600, color: color, height: 1.1),
+              style: PpText.nunito(fontSize: 10, fontWeight: selected ? FontWeight.w800 : FontWeight.w600, color: color, height: 1.1),
             ),
           ],
         ),

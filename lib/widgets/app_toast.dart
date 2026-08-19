@@ -17,6 +17,7 @@ class AppToast {
     Color? color,
     String? actionLabel,
     VoidCallback? onAction,
+    String? amountLabel,
   }) {
     final overlay = _overlay(context);
     if (overlay == null) return;
@@ -31,6 +32,7 @@ class AppToast {
         color: color ?? AppColors.primary,
         actionLabel: actionLabel,
         onAction: onAction,
+        amountLabel: amountLabel,
         onDismiss: () => entry.remove(),
       ),
     );
@@ -48,6 +50,7 @@ class _ToastWidget extends StatefulWidget {
   final Color color;
   final String? actionLabel;
   final VoidCallback? onAction;
+  final String? amountLabel;
   final VoidCallback onDismiss;
 
   const _ToastWidget({
@@ -57,6 +60,7 @@ class _ToastWidget extends StatefulWidget {
     required this.color,
     this.actionLabel,
     this.onAction,
+    this.amountLabel,
     required this.onDismiss,
   });
 
@@ -120,6 +124,25 @@ class _ToastWidgetState extends State<_ToastWidget> with SingleTickerProviderSta
                     ],
                   ),
                 ),
+                if (widget.amountLabel != null) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: widget.color.withValues(alpha: 0.16),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      widget.amountLabel!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                        color: widget.color,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(width: 8),
                 GestureDetector(
                   onTap: widget.onDismiss,
                   child: Icon(Icons.close, size: 18, color: Theme.of(context).colorScheme.onSurfaceVariant),

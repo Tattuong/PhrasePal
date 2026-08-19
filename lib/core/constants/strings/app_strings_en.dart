@@ -114,6 +114,8 @@ const Map<String, String> appStringsEn = {
   'alreadyOwned': 'Already owned',
   'coinsAdded': 'Stars added',
   'coinsAddedWithBonus': 'Stars added with bonus',
+  'coinEarned': '+{amount} stars',
+  'coinRewardSub': 'You now have {balance} stars',
   'removeAdsUnlocked': 'Ads removed',
   'dailyRewardClaimed': 'Daily stars claimed',
   'spinRewardEarned': 'Wheel reward',

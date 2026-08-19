@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../core/constants/app_colors.dart';
+import '../core/constants/app_fonts.dart';
 import '../models/app_theme_preset.dart';
 import '../models/shop_item.dart';
 import '../providers/shop_provider.dart';
@@ -19,15 +19,15 @@ class AppTypography {
   static TextTheme textTheme(Brightness brightness) {
     final onSurface = brightness == Brightness.dark ? AppColors.textPrimary : AppColors.lightTextPrimary;
     final onVariant = brightness == Brightness.dark ? AppColors.textSecondary : AppColors.textSecondary;
-    final base = GoogleFonts.interTextTheme();
-    return base.apply(bodyColor: onSurface, displayColor: onSurface).copyWith(
-          bodyLarge: base.bodyLarge?.copyWith(color: onSurface, fontWeight: FontWeight.w400),
-          bodyMedium: base.bodyMedium?.copyWith(color: onSurface),
-          bodySmall: base.bodySmall?.copyWith(color: onVariant),
-          titleLarge: base.titleLarge?.copyWith(color: onSurface, fontWeight: FontWeight.w600),
-          titleMedium: base.titleMedium?.copyWith(color: onSurface, fontWeight: FontWeight.w600),
-          labelLarge: base.labelLarge?.copyWith(color: onSurface, fontWeight: FontWeight.w600),
-          labelMedium: base.labelMedium?.copyWith(color: onSurface, fontWeight: FontWeight.w500),
+    final base = ThemeData(brightness: brightness, fontFamily: PpText.family).textTheme;
+    return base.apply(bodyColor: onSurface, displayColor: onSurface, fontFamily: PpText.family).copyWith(
+          bodyLarge: base.bodyLarge?.copyWith(color: onSurface, fontWeight: FontWeight.w400, fontFamily: PpText.family),
+          bodyMedium: base.bodyMedium?.copyWith(color: onSurface, fontFamily: PpText.family),
+          bodySmall: base.bodySmall?.copyWith(color: onVariant, fontFamily: PpText.family),
+          titleLarge: base.titleLarge?.copyWith(color: onSurface, fontWeight: FontWeight.w600, fontFamily: PpText.family),
+          titleMedium: base.titleMedium?.copyWith(color: onSurface, fontWeight: FontWeight.w600, fontFamily: PpText.family),
+          labelLarge: base.labelLarge?.copyWith(color: onSurface, fontWeight: FontWeight.w600, fontFamily: PpText.family),
+          labelMedium: base.labelMedium?.copyWith(color: onSurface, fontWeight: FontWeight.w500, fontFamily: PpText.family),
         );
   }
 
@@ -37,7 +37,7 @@ class AppTypography {
     Color? color,
     double? height,
   }) =>
-      GoogleFonts.playfairDisplay(
+      PpText.nunito(
         fontSize: size,
         fontWeight: weight,
         color: color ?? AppColors.textPrimary,
@@ -45,13 +45,13 @@ class AppTypography {
       );
 
   static TextStyle journalTitle({Color? color}) =>
-      GoogleFonts.nunito(fontSize: 32, fontWeight: FontWeight.w800, letterSpacing: -0.5, color: color ?? AppColors.onSurface);
+      PpText.nunito(fontSize: 32, fontWeight: FontWeight.w800, letterSpacing: -0.5, color: color ?? AppColors.onSurface);
 
   static TextStyle displayLarge({Color? color}) =>
-      GoogleFonts.nunito(fontSize: 32, fontWeight: FontWeight.w800, letterSpacing: -1, color: color ?? AppColors.textPrimary);
+      PpText.nunito(fontSize: 32, fontWeight: FontWeight.w800, letterSpacing: -1, color: color ?? AppColors.textPrimary);
 
   static TextStyle titleLarge({Color? color}) =>
-      GoogleFonts.nunito(
+      PpText.nunito(
         fontSize: 22,
         fontWeight: FontWeight.w700,
         letterSpacing: -0.5,
@@ -59,10 +59,10 @@ class AppTypography {
       );
 
   static TextStyle labelBold({Color? color, double size = 12}) =>
-      GoogleFonts.nunito(fontSize: size, fontWeight: FontWeight.w700, color: color ?? AppColors.textPrimary);
+      PpText.nunito(fontSize: size, fontWeight: FontWeight.w700, color: color ?? AppColors.textPrimary);
 
   static TextStyle body({Color? color, double size = 15}) =>
-      GoogleFonts.nunito(fontSize: size, fontWeight: FontWeight.w400, height: 1.65, color: color ?? AppColors.onSurface);
+      PpText.nunito(fontSize: size, fontWeight: FontWeight.w400, height: 1.65, color: color ?? AppColors.onSurface);
 }
 
 class AppDecorations {
@@ -237,17 +237,17 @@ class AppPageScaffold extends StatelessWidget {
       return content;
     }
 
-    final shop = context.watch<ShopProvider>();
-    final preset = shop.activeTheme;
+    final shopLook = context.select<ShopProvider, (String, String)>((s) => (s.activeThemeId, s.activeBackgroundId));
+    final preset = AppThemePresets.get(shopLook.$1);
 
     return Scaffold(
       backgroundColor: isDark ? preset.darkBackground : preset.background,
       floatingActionButton: floatingActionButton,
       body: AppDecorations.meshBackground(
         isDark: isDark,
-        accentGradient: shop.activeBackground.id == ShopCatalog.defaultBackgroundId
+        accentGradient: shopLook.$2 == ShopCatalog.defaultBackgroundId
             ? null
-            : shop.activeBackground.gradient,
+            : AppBackground.get(shopLook.$2).gradient,
         child: content,
       ),
     );
@@ -322,7 +322,7 @@ class LumenPaper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final skin = context.watch<ShopProvider>().activeCardStyle;
+    final skin = CardStyle.get(context.select<ShopProvider, String>((s) => s.activeSkinId));
     final accent = context.lumenAccent;
     final r = skin.paperRadius(fallbackRadius);
     final decoration = skin.lookDecoration(fill: fill, accent: accent, radius: r);

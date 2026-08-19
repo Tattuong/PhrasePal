@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_fonts.dart';
 import '../../core/constants/app_strings.dart';
+import '../../models/app_theme_preset.dart';
 import '../../providers/phrase_provider.dart';
 import '../../providers/shop_provider.dart';
-import '../../widgets/app_scaffold.dart';
 import 'category_screen.dart';
 import 'practice_screen.dart';
 
@@ -16,23 +16,25 @@ class SavedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final phrases = context.watch<PhraseProvider>();
-    final shop = context.watch<ShopProvider>();
+    final look = context.select<ShopProvider, (int, String, bool)>(
+      (s) => (s.loginStreak, s.activeSkinId, s.hasLargeType),
+    );
     final saved = phrases.savedPhrases;
-    final skin = shop.activeCardStyle;
-    final streak = shop.loginStreak.clamp(1, 7);
+    final skin = CardStyle.get(look.$2);
+    final streak = look.$1.clamp(1, 7);
+    final large = look.$3;
     final ink = AppColors.ink(context);
 
-    return FtrBackground(
-      child: SafeArea(
-        child: ListView(
+    return SafeArea(
+      child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
           children: [
             Row(
               children: [
                 Expanded(
-                  child: Text(AppStrings.t(context, 'savedPhrases'), style: GoogleFonts.nunito(fontSize: 26, fontWeight: FontWeight.w800, color: ink)),
+                  child: Text(AppStrings.t(context, 'savedPhrases'), style: PpText.nunito(fontSize: 26, fontWeight: FontWeight.w800, color: ink)),
                 ),
-                Icon(Icons.star_rounded, color: AppColors.coin),
+                const Icon(Icons.star_rounded, color: AppColors.coin),
               ],
             ),
             const SizedBox(height: 14),
@@ -45,8 +47,8 @@ class SavedScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(AppStrings.t(context, 'travelStreak'), style: GoogleFonts.nunito(color: Colors.white70, fontWeight: FontWeight.w700)),
-                  Text(AppStrings.t(context, 'days', {'n': '${shop.loginStreak}'}), style: GoogleFonts.nunito(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
+                  Text(AppStrings.t(context, 'travelStreak'), style: PpText.nunito(color: Colors.white70, fontWeight: FontWeight.w700)),
+                  Text(AppStrings.t(context, 'days', {'n': '${look.$1}'}), style: PpText.nunito(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,8 +79,8 @@ class SavedScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(AppStrings.t(context, 'offlineBanner'), style: GoogleFonts.nunito(fontWeight: FontWeight.w800, color: const Color(0xFF1B5E38))),
-                        Text(AppStrings.t(context, 'offlineBannerDesc'), style: GoogleFonts.nunito(fontSize: 12, color: const Color(0xFF2E7D4F))),
+                        Text(AppStrings.t(context, 'offlineBanner'), style: PpText.nunito(fontWeight: FontWeight.w800, color: const Color(0xFF1B5E38))),
+                        Text(AppStrings.t(context, 'offlineBannerDesc'), style: PpText.nunito(fontSize: 12, color: const Color(0xFF2E7D4F))),
                       ],
                     ),
                   ),
@@ -86,14 +88,14 @@ class SavedScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
-            Text(AppStrings.t(context, 'yourFavorites'), style: GoogleFonts.nunito(fontSize: 18, fontWeight: FontWeight.w800, color: ink)),
+            Text(AppStrings.t(context, 'yourFavorites'), style: PpText.nunito(fontSize: 18, fontWeight: FontWeight.w800, color: ink)),
             const SizedBox(height: 10),
             if (saved.isEmpty)
-              Text(AppStrings.t(context, 'noFavorites'), style: GoogleFonts.nunito(color: AppColors.muted(context)))
+              Text(AppStrings.t(context, 'noFavorites'), style: PpText.nunito(color: AppColors.muted(context)))
             else
               ...saved.map((p) => Padding(
                     padding: const EdgeInsets.only(bottom: 10),
-                    child: PhraseCard(phrase: p, skin: skin, large: shop.hasLargeType),
+                    child: PhraseCard(phrase: p, skin: skin, large: large),
                   )),
             const SizedBox(height: 12),
             Container(
@@ -105,8 +107,8 @@ class SavedScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(AppStrings.t(context, 'quickPractice'), style: GoogleFonts.nunito(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
-                  Text(AppStrings.t(context, 'quickPracticeDesc'), style: GoogleFonts.nunito(color: Colors.white70, fontSize: 13)),
+                  Text(AppStrings.t(context, 'quickPractice'), style: PpText.nunito(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
+                  Text(AppStrings.t(context, 'quickPracticeDesc'), style: PpText.nunito(color: Colors.white70, fontSize: 13)),
                   const SizedBox(height: 12),
                   SizedBox(
                     width: double.infinity,
@@ -123,7 +125,6 @@ class SavedScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

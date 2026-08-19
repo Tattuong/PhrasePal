@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/services/sound_service.dart';
 import '../../core/constants/app_strings.dart';
 import '../../models/app_theme_preset.dart';
 import '../../providers/phrase_provider.dart';
-import '../../providers/shop_provider.dart';
 import '../../widgets/app_scaffold.dart';
 import '../home/main_shell.dart';
+import '../../core/constants/app_fonts.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -45,7 +44,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<ShopProvider>();
     final ftr = context.ftrTheme;
 
     return Scaffold(
@@ -81,13 +79,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           Text(
                             AppStrings.t(context, titleKey),
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.nunito(fontSize: 26, fontWeight: FontWeight.w800),
+                            style: PpText.nunito(fontSize: 26, fontWeight: FontWeight.w800),
                           ),
                           const SizedBox(height: 12),
                           Text(
                             AppStrings.t(context, descKey),
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.nunito(fontSize: 16, height: 1.45, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                            style: PpText.nunito(fontSize: 16, height: 1.45, color: Theme.of(context).colorScheme.onSurfaceVariant),
                           ),
                         ],
                       ),
