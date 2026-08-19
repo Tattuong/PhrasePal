@@ -1,0 +1,18 @@
+{
+  "app": "PhrasePal",
+  "package": "com.PhrasePalMNG.PhrasePal",
+  "config_url": "https://api2.blwsmartware.net/N237.json",
+  "products": [
+    { "id": "pp_pack_1", "type": "consumable", "coins": 50 },
+    { "id": "pp_pack_2", "type": "consumable", "coins": 100 },
+    { "id": "pp_pack_3", "type": "consumable", "coins": 200 },
+    { "id": "pp_pack_4", "type": "consumable", "coins": 350 },
+    { "id": "pp_pack_5", "type": "consumable", "coins": 500 },
+    { "id": "pp_pack_6", "type": "consumable", "coins": 750 },
+    { "id": "pp_pack_7", "type": "consumable", "coins": 1000 },
+    { "id": "pp_pack_8", "type": "consumable", "coins": 1500 },
+    { "id": "pp_pack_9", "type": "consumable", "coins": 2200 },
+    { "id": "pp_pack_10", "type": "consumable", "coins": 3000 },
+    { "id": "pp_remove_ads", "type": "non-consumable" }
+  ]
+}
